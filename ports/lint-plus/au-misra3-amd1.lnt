@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
-// Copyright Gimpel Software LLC 2020. All rights reserved.
+// Copyright Vector Informatik GmbH 2020. All rights reserved.
 //
-// This file is provided by Gimpel Software LLC (https://www.gimpel.com) for
+// This file is provided by Vector Informatik GmbH (https://www.vector.com) for
 // use with PC-lint Plus. Redistribution is permitted but any redistribution
 // must preserve this notice and, if the redistributed file has been modified,
 // provide notice that the file has been modified from the original.
@@ -23,10 +23,10 @@
 
         lint au-misra3.lnt au-misra3-amd1.lnt hello.c
 
-    Gimpel Software relies on the document, "MISRA C:2012 Amendment 1
+    Vector Informatik GmbH relies on the document, "MISRA C:2012 Amendment 1
     Additional security guidelines for MISRA C:2012"
     copyright 2016 by HORIBA MIRA Ltd, as the primary source for this
-    file. Gimpel Software makes no warranty as to the completeness
+    file. Vector Informatik GmbH makes no warranty as to the completeness
     or applicability of this options file and reserves the right to
     amend or alter the official contents of such at any time.
 
@@ -35,8 +35,8 @@
 
  */
 
-/* version check */ -cond('%PCLP_NO_LNT_VERSION_CHECK%' != '1' && (%LINT_MAJOR_VERSION% != 1 || %LINT_MINOR_VERSION% != 4),
-    +fatal_error(This configuration file is intended for PC-lint Plus 1.4.
+/* version check */ -cond('%PCLP_NO_LNT_VERSION_CHECK%' != '1' && (%LINT_MAJOR_VERSION% != 2 || %LINT_MINOR_VERSION% != 0),
+    +fatal_error(This configuration file is intended for PC-lint Plus 2.0.
                  You are attempting to use it with PC-lint Plus %LINT_MAJOR_VERSION%.%LINT_MINOR_VERSION%.
                  It is recommended that you use configuration files intended
                  for PC-lint Plus %LINT_MAJOR_VERSION%.%LINT_MINOR_VERSION%.)
@@ -59,8 +59,8 @@
 
 /**** Rule 21.13 (Mand) ************/
 
-    /* While MISRA has declared this rule to be "undecidable", Gimpel
-     * Software provides the following options to assist:
+    /* While MISRA has declared this rule to be "undecidable", the
+     * following options are provided to assist:
      */
 
     /* Define EOF until a proper definition is seen */
@@ -166,21 +166,21 @@
 
 /**** Rule 21.15 (Req) ************/
 
-    +e857              /* incompatible pointer arguments to memcpy/memmove/memcmp */
+    +e857	  	    /* incompatible pointer arguments to memcpy/memmove/memcmp */
     +elib(857)
     -append(857,[MISRA 2012 Rule 21.15, required])
 
 /**** Rule 21.16 (Req) ************/
 
-    +e9098          /* pointer argument to memcmp does not point to a pointer type
+    +e9098  	    /* pointer argument to memcmp does not point to a pointer type
                        or an essentially signed, unsigned, boolean, or enum type */
     +elib(9098)
     -append(9098,[MISRA 2012 Rule 21.16, required])
 
 /**** Rule 21.17 (Mand) ************/
 
-    /* While MISRA has declared this rule to be "undecidable", Gimpel
-     * Software provides the following options to assist:
+    /* While MISRA has declared this rule to be "undecidable", the
+     * following options are provided to assist:
      */
 
     /* 419 - apparent data overrun for function */
@@ -194,8 +194,8 @@
 
 /**** Rule 21.18 (Mand) ************/
 
-    /* While MISRA has declared this rule to be "undecidable", Gimpel
-     * Software provides the following options to assist:
+    /* While MISRA has declared this rule to be "undecidable", the
+     * following options are provided to assist:
      */
 
     /* 419 - apparent data overrun for function */

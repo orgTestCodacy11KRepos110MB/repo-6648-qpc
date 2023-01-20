@@ -23,8 +23,8 @@
 * <info@state-machine.com>
 ============================================================================*/
 /*!
-* @date Last updated on: 2023-01-14
-* @version Last updated for: @ref qpc_7_2_1
+* @date Last updated on: 2023-01-25
+* @version Last updated for: @ref qpc_7_2_2
 *
 * @file
 * @brief QXK/C port to ARM Cortex-M, ARM-CLANG toolset
@@ -46,12 +46,12 @@ void NMI_Handler(void);
 #endif
 
 #define SCnSCB_ICTR  ((uint32_t volatile *)0xE000E004U)
-#define SCB_SYSPRI   ((uint32_t volatile *)0xE000ED14U)
+#define SCB_SYSPRI   ((uint32_t volatile *)0xE000ED18U)
 #define NVIC_EN      ((uint32_t volatile *)0xE000E100U)
 #define NVIC_IP      ((uint8_t  volatile *)0xE000E400U)
 #define FPU_FPCCR   *((uint32_t volatile *)0xE000EF34U)
 #define NVIC_PEND    0xE000E200
-#define NVIC_ICSR    0xE000ED04
+#define SCB_ICSR     0xE000ED04
 
 /*..........................................................................*/
 /* Initialize the exception priorities and IRQ priorities to safe values.
@@ -74,16 +74,16 @@ void QXK_init(void) {
 #if (__ARM_ARCH != 6)   /*--------- if ARMv7-M and higher... */
 
     /* set exception priorities to QF_BASEPRI...
-    * SCB_SYSPRI1: Usage-fault, Bus-fault, Memory-fault
+    * SCB_SYSPRI[0]: Usage-fault, Bus-fault, Memory-fault
     */
-    SCB_SYSPRI[1] = (SCB_SYSPRI[1]
+    SCB_SYSPRI[0] = (SCB_SYSPRI[0]
         | (QF_BASEPRI << 16U) | (QF_BASEPRI << 8U) | QF_BASEPRI);
 
-    /* SCB_SYSPRI2: SVCall */
-    SCB_SYSPRI[2] = (SCB_SYSPRI[2] | (QF_BASEPRI << 24U));
+    /* SCB_SYSPRI[1]: SVCall */
+    SCB_SYSPRI[1] = (SCB_SYSPRI[1] | (QF_BASEPRI << 24U));
 
-    /* SCB_SYSPRI3:  SysTick, PendSV, Debug */
-    SCB_SYSPRI[3] = (SCB_SYSPRI[3]
+    /* SCB_SYSPRI[2]:  SysTick, PendSV, Debug */
+    SCB_SYSPRI[2] = (SCB_SYSPRI[2]
         | (QF_BASEPRI << 24U) | (QF_BASEPRI << 16U) | QF_BASEPRI);
 
     /* set all implemented IRQ priories to QF_BASEPRI... */
@@ -94,8 +94,8 @@ void QXK_init(void) {
 
 #endif                  /*--------- ARMv7-M or higher */
 
-    /* SCB_SYSPRI3: PendSV set to priority 0xFF (lowest) */
-    SCB_SYSPRI[3] = (SCB_SYSPRI[3] | (0xFFU << 16U));
+    /* SCB_SYSPRI[2]: PendSV set to priority 0xFF (lowest) */
+    SCB_SYSPRI[2] = (SCB_SYSPRI[2] | (0xFFU << 16U));
 
 #ifdef QXK_USE_IRQ_NUM   /*--------- QXK IRQ specified? */
     /* The QXK port is configured to use a given ARM Cortex-M IRQ #
@@ -212,7 +212,7 @@ __asm volatile (
 
     /* Prepare constants in registers before entering critical section */
     "  LDR     r3,=QXK_attr_    \n"
-    "  LDR     r2,=" STRINGIFY(NVIC_ICSR) "\n" /* Interrupt Control and State */
+    "  LDR     r2,=" STRINGIFY(SCB_ICSR) "\n" /* Interrupt Control and State */
     "  MOVS    r1,#1            \n"
     "  LSLS    r1,r1,#27        \n" /* r0 := (1 << 27) (UNPENDSVSET bit) */
 
@@ -531,7 +531,7 @@ __asm volatile (
 #endif                  /*--------- VFP available */
 
 #ifndef QXK_USE_IRQ_NUM /*--------- IRQ NOT defined, use NMI by default */
-    "  LDR     r0,=" STRINGIFY(NVIC_ICSR) "\n" /* Interrupt Control and State */
+    "  LDR     r0,=" STRINGIFY(SCB_ICSR) "\n" /* Interrupt Control and State */
     "  MOVS    r1,#1            \n"
     "  LSLS    r1,r1,#31        \n" /* r1 := (1 << 31) (NMI bit) */
     "  STR     r1,[r0]          \n" /* ICSR[31] := 1 (pend NMI) */

@@ -1,7 +1,7 @@
 /*============================================================================
 * Product: BSP for system-testing QXK kernel, NUCLEO-L053R8 board
-* Last updated for version 7.2.0
-* Last updated on  2022-12-13
+* Last updated for version 7.2.1
+* Last updated on  2023-01-26
 *
 *                    Q u a n t u m  L e a P s
 *                    ------------------------
@@ -244,11 +244,11 @@ void BSP_terminate(int16_t result) {
 }
 /*..........................................................................*/
 void BSP_ledOn(void) {
-    GPIOA->BSRR |= (LED_LD2); /* turn LED2 on  */
+    GPIOA->BSRR = (LED_LD2); /* turn LED2 on  */
 }
 /*..........................................................................*/
 void BSP_ledOff(void) {
-    GPIOA->BSRR |= (LED_LD2 << 16); /* turn LED2 off */
+    GPIOA->BSRR = (LED_LD2 << 16); /* turn LED2 off */
 }
 /*..........................................................................*/
 void BSP_trigISR(void) {
